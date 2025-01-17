@@ -29,6 +29,7 @@
 		if (!isGameStarted) return;
 		if (current === 'p2') return;
 		const r = player2.recieveAttack(x, y);
+		if(r === null) return
 		player2 = player2;
 		if (r === 2 || r === 4) {
 			if (player2.checkIfAllShipsSunk()) {
@@ -49,6 +50,7 @@
 		if (!isGameStarted) return;
 		if (current === 'p1') return;
 		const r = player1.recieveAttack(x, y);
+		if(r === null) return
 		player1 = player1;
 		if (r === 2 || r === 4) {
 			computer.hit(x, y);

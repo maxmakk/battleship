@@ -204,6 +204,7 @@ class Board {
   }
   recieveAttack(s: number, t: number) {
     const e = this.field[s][t];
+    if(e === 3 || e === 2 || e === 4) return null
     if (e === 0) this.field[s][t] = 3;
     else if (e === 1) {
       this.field[s][t] = 2;
