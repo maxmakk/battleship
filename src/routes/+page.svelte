@@ -3,53 +3,48 @@
 	import Board from './board';
 	import Computer from './computer';
 	import Ship from './ship';
+	import { getChar } from '$lib';
 
 	let isGameStarted = false;
-	let winner = '';
+	let ships: Ship[];
+	let status = 'arrangment of the ships';
+	let isDragged = false;
+	let tempShip: null | Pick<Ship, 'size' | 'direction' | 'x' | 'y'> = null;
+	let current = '';
+	let computer = new Computer();
 
 	let player1 = new Board();
 	player1.initGame();
 	player1.autoPlacingShips();
+	ships = [...player1.ships];
 	let player2 = new Board();
 	player2.initGame();
 	player2.autoPlacingShips();
-	const randomize = () => {
-		player1.initGame();
-		player1.autoPlacingShips();
-		player2.initGame();
-		player2.autoPlacingShips();
 
-		player1 = player1;
-		player2 = player2;
-	};
-	let computer = new Computer();
-	computer.init();
-
-	let current = '';
 	const PLAYER_1_MOVE = (x: number, y: number) => {
 		if (!isGameStarted) return;
-		if (current === 'p2') return;
+		if (current === 'p2' || current === '') return;
 		const r = player2.recieveAttack(x, y);
 		if (r === null) return;
 		player2 = player2;
 		if (r === 2 || r === 4) {
 			if (player2.checkIfAllShipsSunk()) {
-				isGameStarted = false;
-				winner = 'player';
+				current = ''
+				changeStatus('player won');
 				return;
 			}
 			current = 'p1';
+			changeStatus('player move');
 		} else {
 			current = 'p2';
-			setTimeout(() => {
-				pcMove();
-			}, 1000);
+			changeStatus('computer move');
+			pcMove();
 		}
 	};
 
 	const PLAYER_2_MOVE = (x: number, y: number) => {
 		if (!isGameStarted) return;
-		if (current === 'p1') return;
+		if (current === 'p1' || current === '') return;
 		const r = player1.recieveAttack(x, y);
 		if (r === null) return;
 		player1 = player1;
@@ -62,37 +57,18 @@
 				}
 			}
 			if (player1.checkIfAllShipsSunk()) {
-				isGameStarted = false;
-				winner = 'computer';
+				current = ''
+				changeStatus('computer won');
 				return;
 			}
 			current = 'p2';
-			setTimeout(() => {
-				pcMove();
-			}, 1000);
+			changeStatus('computer move');
+			pcMove();
 		} else {
 			computer.miss(x, y);
 			current = 'p1';
+			changeStatus('player move');
 		}
-		console.log(computer);
-	};
-	const getChar = (x: number, y: number, b: Board) => {
-		const s = b.findShip(x, y);
-		let c = '';
-		const d = s?.direction;
-		if (d === 0) {
-			c = '&#x25B2;';
-		}
-		if (d === 1) {
-			c = '&#x25BC;';
-		}
-		if (d === 2) {
-			c = '&#x25C0;';
-		}
-		if (d === 3) {
-			c = '&#x25B6;';
-		}
-		return c;
 	};
 	const pcMove = () => {
 		const c = computer.getCoordsForShot();
@@ -100,25 +76,43 @@
 		const els = document.querySelector(`.player1 [data-x="${c![0]}"][data-y="${c![1]}"]`);
 		els?.dispatchEvent(event);
 	};
+
+	const randomize = () => {
+		isGameStarted = false;
+		player1.initGame();
+		player1.autoPlacingShips();
+		player2.initGame();
+		player2.autoPlacingShips();
+		ships = [...player1.ships];
+
+		player1 = player1;
+		player2 = player2;
+	};
 	const start = () => {
 		isGameStarted = true;
+		computer.init();
 		current = Math.random() >= 0.5 ? 'p1' : 'p2';
 		if (current === 'p1') {
-			console.log('your move');
+			changeStatus('player move');
 		} else {
 			pcMove();
-			console.log('pc move');
+			changeStatus('computer move');
 		}
 	};
 
-	const rematch = () => {};
-	let status = 'arrangment of the ships';
-	const changeStatus = (s: string) => {
-		status = '';
-	};
+	const rematch = () => {
+		isGameStarted = false;
+		player1.initGame();
+		ships.forEach((s) => player1.createShip(s.size, s.x, s.y, s.direction));
+		player1 = player1;
 
-	let isDragged = false;
-	let tempShip: null | Pick<Ship, 'size' | 'direction' | 'x' | 'y'> = null;
+		player2.initGame();
+		player2.autoPlacingShips();
+		player2 = player2;
+	};
+	const changeStatus = (s: string) => {
+		status = s;
+	};
 
 	const selectShip = (x: number, y: number) => {
 		if (isGameStarted) return;
@@ -172,10 +166,8 @@
 					break;
 				}
 			}
-
 			tempShip = null;
 		}
-
 		player1 = player1;
 	};
 </script>

@@ -28,6 +28,7 @@ class Computer {
     return t
   }
   init() {
+    this.opponent = [...Array(10)].map(() => Array(10).fill(0))
     this.randomCoords = Computer.shuffle(Computer.getCoords()), this.calculatedCoords = []
   }
   getCoordsForShot() {
