@@ -2,6 +2,7 @@
 	import './../app.css';
 	import Board from './board';
 	import Computer from './computer';
+	import Ship from './ship';
 
 	let isGameStarted = false;
 	let winner = '';
@@ -29,7 +30,7 @@
 		if (!isGameStarted) return;
 		if (current === 'p2') return;
 		const r = player2.recieveAttack(x, y);
-		if(r === null) return
+		if (r === null) return;
 		player2 = player2;
 		if (r === 2 || r === 4) {
 			if (player2.checkIfAllShipsSunk()) {
@@ -50,7 +51,7 @@
 		if (!isGameStarted) return;
 		if (current === 'p1') return;
 		const r = player1.recieveAttack(x, y);
-		if(r === null) return
+		if (r === null) return;
 		player1 = player1;
 		if (r === 2 || r === 4) {
 			computer.hit(x, y);
@@ -111,13 +112,75 @@
 	};
 
 	const rematch = () => {};
-	let status = 'arrangment of the ships'
+	let status = 'arrangment of the ships';
 	const changeStatus = (s: string) => {
-		status = ''
-	}
+		status = '';
+	};
 
+	let isDragged = false;
+	let tempShip: null | Pick<Ship, 'size' | 'direction' | 'x' | 'y'> = null;
+
+	const selectShip = (x: number, y: number) => {
+		if (isGameStarted) return;
+		if (isDragged) return;
+		isDragged = true;
+		const ship = player1.findShip(x, y);
+		if (ship) {
+			tempShip = { ...ship };
+			player1.removeShip(x, y);
+		}
+		player1 = player1;
+	};
+	const replaceShip = (event: MouseEvent) => {
+		if (isGameStarted) return;
+		if (!isDragged) return;
+		const t = event.target;
+		let x = null;
+		let y = null;
+		if (
+			t instanceof Element &&
+			t.closest('.player1') &&
+			t.getAttribute('data-x') &&
+			t.getAttribute('data-y')
+		) {
+			x = Number(t.getAttribute('data-x'));
+			y = Number(t.getAttribute('data-y'));
+		}
+		if (tempShip) {
+			const { size: s, direction: d } = tempShip;
+			if (x !== null && y !== null && player1.placingShip(s, x, y, d)) {
+				player1.createShip(s, x, y, d);
+			} else {
+				player1.createShip(s, tempShip.x, tempShip.y, d);
+			}
+		}
+		isDragged = false;
+		tempShip = null;
+		player1 = player1;
+	};
+	const rotateShip = (x: number, y: number) => {
+		if (isGameStarted) return;
+		const s = player1.findShip(x, y);
+		if (s) {
+			tempShip = { ...s };
+			player1.removeShip(x, y);
+			const { size: r, direction: i } = tempShip;
+			for (let o = 0; o < 4; o += 1) {
+				const n = (i + o + 1) % 4;
+				if (player1.placingShip(r, tempShip.x, tempShip.y, n)) {
+					player1.createShip(r, tempShip.x, tempShip.y, n);
+					break;
+				}
+			}
+
+			tempShip = null;
+		}
+
+		player1 = player1;
+	};
 </script>
 
+<svelte:document onmouseup={replaceShip} />
 <div class="container">
 	<div class="status">{status}</div>
 	<div class="fields" class:reversed={!isGameStarted}>
@@ -135,7 +198,14 @@
 							data-x={row}
 							data-y={column}
 							onclick={() => PLAYER_2_MOVE(row, column)}
-							>{@html e}{@html s}{@html h}{@html m}{@html d}</button
+							oncontextmenu={(event) => {
+								event.preventDefault();
+								rotateShip(row, column);
+							}}
+							onmousedown={(event) => {
+								if (event.button !== 0) return;
+								selectShip(row, column);
+							}}>{@html e}{@html s}{@html h}{@html m}{@html d}</button
 						>
 					{/each}
 				</div>
@@ -161,11 +231,10 @@
 	</div>
 
 	<div class="buttons">
-<button class="btn" onclick={randomize}>randomize</button>
-<button class="btn" onclick={start}>play</button>
-<button class="btn" onclick={rematch}>rematch</button>
+		<button class="btn" onclick={randomize}>randomize</button>
+		<button class="btn" onclick={start}>play</button>
+		<button class="btn" onclick={rematch}>rematch</button>
 	</div>
-
 </div>
 
 <style>
@@ -184,7 +253,6 @@
 		align-items: end;
 	}
 	.reversed {
-		
 		flex-direction: column-reverse;
 	}
 
