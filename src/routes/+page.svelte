@@ -73,7 +73,7 @@
 	const pcMove = () => {
 		const c = computer.getCoordsForShot();
 		const event = new Event('click', { bubbles: true });
-		const els = document.querySelector(`.player1 [data-x="${c![0]}"][data-y="${c![1]}"]`);
+		const els = document.querySelector(`.player [data-x="${c![0]}"][data-y="${c![1]}"]`);
 		els?.dispatchEvent(event);
 	};
 
@@ -112,6 +112,7 @@
 		player2.autoPlacingShips();
 		player2 = player2;
 	};
+
 	const changeStatus = (s: string) => {
 		status = s;
 	};
@@ -135,7 +136,7 @@
 		let y = null;
 		if (
 			t instanceof Element &&
-			t.closest('.player1') &&
+			t.closest('.player') &&
 			t.getAttribute('data-x') &&
 			t.getAttribute('data-y')
 		) {
@@ -178,7 +179,7 @@
 <div class="container">
 	<div class="status">{status}</div>
 	<div class="fields" class:reversed={!isGameStarted}>
-		<div class="player1" class:small={isGameStarted}>
+		<div class="player" class:small={isGameStarted}>
 			{#each Array.from(Array(10).keys()) as row (row)}
 				<div class="row">
 					{#each Array.from(Array(10).keys()) as column (column)}
@@ -225,9 +226,9 @@
 		</div>
 	</div>
 
-	<div class="buttons">
-		<button class="btn" onclick={randomize}>randomize</button>
-		<button class="btn" onclick={start}>play</button>
+	<div>
+		<button disabled={isGameStarted} class="btn" onclick={randomize}>randomize</button>
+		<button disabled={isGameStarted} class="btn" onclick={start}>play</button>
 		<button class="btn" onclick={rematch}>rematch</button>
 	</div>
 </div>

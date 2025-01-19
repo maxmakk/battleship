@@ -5,10 +5,20 @@
 }
 
 :root {
-
   font-size: clamp(2rem, 1.6875rem + 1vw, 2.25rem);
 }
 
+body {
+  font-family: monospace;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
 
 
 .container {
@@ -22,12 +32,14 @@
 }
 
 .btn {
-  background-color: transparent;
-  border: none;
-  font-family: inherit;
   font-size: 0.5rem;
   cursor: pointer;
   border: 2px solid coral;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: initial;
 }
 
 .btn::before {
@@ -66,15 +78,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: inherit;
-  font-size: inherit;
-  background-color: transparent;
-  border: none;
   width: 1em;
   height: 1em;
 }
 
 .square:hover {
-  cursor: pointer;
   color: coral;
 }
