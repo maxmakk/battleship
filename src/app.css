@@ -1,81 +1,80 @@
 *,
 *::before,
 *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 :root {
-  font-size: clamp(2rem, 1.6875rem + 1vw, 2.25rem);
+	font-size: clamp(2rem, 1.6875rem + 1vw, 2.25rem);
 }
 
 body {
-  font-family: monospace;
+	font-family: monospace;
 }
 
 button {
-  padding: 0;
-  font-family: inherit;
-  font-size: inherit;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
+	padding: 0;
+	font-family: inherit;
+	font-size: inherit;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
 }
 
-
 .container {
-  margin: 0 auto;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
+	margin: 0 auto;
+	max-width: 800px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
 }
 
 .btn {
-  padding: 0.2em;
-  font-size: 0.5rem;
-  cursor: pointer;
-  border: 2px solid coral;
+	padding: 0.2em;
+	font-size: 0.5rem;
+	cursor: pointer;
+	border: 2px solid coral;
 }
 
 .btn:disabled {
-  opacity: 0.5;
-  cursor: initial;
+	opacity: 0.5;
+	cursor: initial;
 }
 
 .status {
-  font-size: 0.5rem;
+	font-size: 0.5rem;
 }
 
 .row {
-  display: grid;
-  grid-template-columns: repeat(10, 1em);
+	display: grid;
+	grid-template-columns: repeat(10, 1em);
 }
 
 .fields {
-  display: flex;
-  gap: 0.5em;
-  flex-direction: column;
-  align-items: end;
+	display: flex;
+	gap: 0.5em;
+	flex-direction: column;
+	align-items: end;
 }
 
 .reversed {
-  flex-direction: column-reverse;
+	flex-direction: column-reverse;
 }
 
 .small {
-  font-size: 0.5rem;
+	font-size: 0.5rem;
 }
 
 .square {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1em;
-  height: 1em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1em;
+	height: 1em;
 }
 
 .square:hover {
-  color: coral;
+	color: coral;
 }
