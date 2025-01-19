@@ -38,7 +38,9 @@
 		} else {
 			current = 'p2';
 			changeStatus('computer move');
-			pcMove();
+			setTimeout(() => {
+				pcMove();
+			}, 500);
 		}
 	};
 
@@ -63,7 +65,9 @@
 			}
 			current = 'p2';
 			changeStatus('computer move');
-			pcMove();
+			setTimeout(() => {
+				pcMove();
+			}, 500);
 		} else {
 			computer.miss(x, y);
 			current = 'p1';
@@ -96,7 +100,10 @@
 		if (current === 'p1') {
 			changeStatus('player move');
 		} else {
-			pcMove();
+			setTimeout(() => {
+				pcMove();
+			}, 500);
+
 			changeStatus('computer move');
 		}
 	};
@@ -212,8 +219,10 @@
 				<div class="row">
 					{#each Array.from(Array(10).keys()) as column (column)}
 						{@const e = player2.field[row][column] === 0 ? '&bull;' : ''}
-						{@const n = player2.field[row][column] === 1 && status !== 'computer won' ? '&bull;' : ''}
-						{@const s = player2.field[row][column] === 1 && status === 'computer won' ? '&square;' : ''}
+						{@const n =
+							player2.field[row][column] === 1 && status !== 'computer won' ? '&bull;' : ''}
+						{@const s =
+							player2.field[row][column] === 1 && status === 'computer won' ? '&square;' : ''}
 						{@const h = player2.field[row][column] === 2 ? '&square;' : ''}
 						{@const m = player2.field[row][column] === 3 ? '&times;' : ''}
 						{@const d = player2.field[row][column] === 4 ? '&timesb;' : ''}
@@ -232,4 +241,3 @@
 		<button class="btn" onclick={rematch}>rematch</button>
 	</div>
 </div>
-
