@@ -37,3 +37,44 @@
 .btn::after {
   content: "]";
 }
+
+.status {
+  font-size: 0.5rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(10, 1em);
+}
+
+.fields {
+  display: flex;
+  gap: 0.5em;
+  flex-direction: column;
+  align-items: end;
+}
+
+.reversed {
+  flex-direction: column-reverse;
+}
+
+.small {
+  font-size: 0.5rem;
+}
+
+.square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  font-size: inherit;
+  background-color: transparent;
+  border: none;
+  width: 1em;
+  height: 1em;
+}
+
+.square:hover {
+  cursor: pointer;
+  color: coral;
+}

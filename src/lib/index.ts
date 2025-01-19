@@ -1,7 +1,7 @@
 import type Board from "../routes/board";
 export const getChar = (x: number, y: number, b: Board) => {
   const s = b.findShip(x, y);
-  let c = '';
+  let c = '&bull;';
   const d = s?.direction;
   if (d === 0) {
     c = '&#x25B2;';

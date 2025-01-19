@@ -29,7 +29,7 @@
 		player2 = player2;
 		if (r === 2 || r === 4) {
 			if (player2.checkIfAllShipsSunk()) {
-				current = ''
+				current = '';
 				changeStatus('player won');
 				return;
 			}
@@ -57,7 +57,7 @@
 				}
 			}
 			if (player1.checkIfAllShipsSunk()) {
-				current = ''
+				current = '';
 				changeStatus('computer won');
 				return;
 			}
@@ -79,6 +79,7 @@
 
 	const randomize = () => {
 		isGameStarted = false;
+		changeStatus('arrangment of the ships');
 		player1.initGame();
 		player1.autoPlacingShips();
 		player2.initGame();
@@ -102,6 +103,7 @@
 
 	const rematch = () => {
 		isGameStarted = false;
+		changeStatus('arrangment of the ships');
 		player1.initGame();
 		ships.forEach((s) => player1.createShip(s.size, s.x, s.y, s.direction));
 		player1 = player1;
@@ -209,12 +211,13 @@
 				<div class="row">
 					{#each Array.from(Array(10).keys()) as column (column)}
 						{@const e = player2.field[row][column] === 0 ? '&bull;' : ''}
-						{@const s = player2.field[row][column] === 1 ? '&bull;' : ''}
+						{@const n = player2.field[row][column] === 1 && status !== 'computer won' ? '&bull;' : ''}
+						{@const s = player2.field[row][column] === 1 && status === 'computer won' ? '&square;' : ''}
 						{@const h = player2.field[row][column] === 2 ? '&square;' : ''}
 						{@const m = player2.field[row][column] === 3 ? '&times;' : ''}
 						{@const d = player2.field[row][column] === 4 ? '&timesb;' : ''}
 						<button class="square" onclick={() => PLAYER_1_MOVE(row, column)}
-							>{@html e}{@html s}{@html h}{@html m}{@html d}</button
+							>{@html e}{@html s}{@html h}{@html m}{@html d}{@html n}</button
 						>
 					{/each}
 				</div>
@@ -229,42 +232,3 @@
 	</div>
 </div>
 
-<style>
-	.status {
-		font-size: 0.5rem;
-	}
-	.row {
-		display: grid;
-		grid-template-columns: repeat(10, 1em);
-	}
-
-	.fields {
-		display: flex;
-		gap: 0.5em;
-		flex-direction: column;
-		align-items: end;
-	}
-	.reversed {
-		flex-direction: column-reverse;
-	}
-
-	.small {
-		font-size: 0.5rem;
-	}
-
-	.square {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-family: inherit;
-		font-size: inherit;
-		background-color: transparent;
-		border: none;
-		width: 1em;
-		height: 1em;
-	}
-	.square:hover {
-		cursor: pointer;
-		color: coral;
-	}
-</style>
