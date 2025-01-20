@@ -161,6 +161,7 @@
 		isDragged = false;
 		tempShip = null;
 		player1 = player1;
+		ships = [...player1.ships];
 	};
 	const rotateShip = (x: number, y: number) => {
 		if (isGameStarted) return;
@@ -179,6 +180,7 @@
 			tempShip = null;
 		}
 		player1 = player1;
+		ships = [...player1.ships];
 	};
 </script>
 
